@@ -1,0 +1,9 @@
+kafka:
+    bootstrapServers: localhost:9092
+    applicationId: data-processing-service
+    invoiceTopic: invoice-topic-v1
+    invoiceDetailTopic: invoice-audit-log-v1
+    customerTopic: customer-topic-v1
+    articleTopic: article-topic-v1
+    customerStore: customer-store-v1
+    articleStore: article-store-v1
