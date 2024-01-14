@@ -1,0 +1,18 @@
+# Create a resource group
+az group create --name clc3-diesenreiter-stadler --location eastus
+
+
+# Create an Azure Container Registry
+az acr create --resource-group clc3-diesenreiter-stadler --name clc3helmacr --sku Basic
+
+
+# Create an AKS cluster
+# https://docs.microsoft.com/en-us/azure/azure-supportability/per-vm-quota-requests
+# https://aka.ms/ProdportalCRP/#blade/Microsoft_Azure_Capacity/UsageAndQuota.ReactView/Parameters/%7B%22subscriptionId%22:%22a2324cbb-3546-416d-a8a3-6b84c8aa90af%22,%22command%22:%22openQuotaApprovalBlade%22,%22quotas%22:[%7B%22location%22:%22GermanyWestCentral%22,%22providerId%22:%22Microsoft.Compute%22,%22resourceName%22:%22standardDSv2Family%22,%22quotaRequest%22:%7B%22properties%22:%7B%22limit%22:6,%22unit%22:%22Count%22,%22name%22:%7B%22value%22:%22standardDSv2Family%22%7D%7D%7D%7D]%7D
+az aks create --resource-group clc3-diesenreiter-stadler --name clc3-aks-cluster --location eastus --attach-acr clc3helmacr --generate-ssh-keys
+az aks install-cli 
+az aks get-credentials --resource-group clc3-diesenreiter-stadler --name clc3-aks-cluster
+
+
+# Clean up resources
+az group delete --name clc3-diesenreiter-stadler --yes --no-wait

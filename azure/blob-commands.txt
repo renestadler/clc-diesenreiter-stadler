@@ -1,0 +1,15 @@
+az group create --name clc3-diesenreiter-stadler --location eastus
+
+az storage account create --name clc3blob --resource-group clc3-diesenreiter-stadler --location eastus --sku Standard_ZRS --encryption-services blob
+
+$key=(az storage account keys list -g clc3-diesenreiter-stadler -n clc3blob --query [0].value -o tsv)
+
+az storage container create --account-name clc3blob --name clc3-blob-storage-container --account-key $key --auth-mode key
+
+
+echo "STORAGE_ACCOUNT_NAME=clc3blob" > C:\Users\P42532\.01_FH\__Uni\CLC\.env
+echo "STORAGE_ACCOUNT_KEY=$key" >> C:\Users\P42532\.01_FH\__Uni\CLC\.env
+echo "STORAGE_ACCOUNT_URL=https://clc3blob.blob.core.windows.net" >> C:\Users\P42532\.01_FH\__Uni\CLC\.env
+echo "STORAGE_ACCOUNT_CONTAINER=clc3-blob-storage-container" >> C:\Users\P42532\.01_FH\__Uni\CLC\.env
+
+az group delete --name clc3-diesenreiter-stadler --no-wait
