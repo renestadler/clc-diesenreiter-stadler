@@ -46,7 +46,7 @@ public class InvoiceProcessor extends ContextualProcessor<byte[], byte[], Void, 
             entries[i] = new InvoiceDetail.InvoiceDetailEntry(
                     ModelConverter.toArticle(KeyValue.pair(entry.articleId(), articleStore.get(entry.articleId()).value())),
                     entry.amount());
-            totalAmount += entries[i].article().price();
+            totalAmount += entry.amount() * entries[i].article().price();
         }
         InvoiceDetail invoiceDetail = new InvoiceDetail(invoice.id(), customer, invoice.address(), entries, totalAmount);
         LOGGER.info("Add invoice to audit log: {}", invoiceDetail);

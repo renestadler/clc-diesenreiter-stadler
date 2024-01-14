@@ -17,6 +17,8 @@ public class ModelConverter {
             MethodHandles.byteArrayViewVarHandle(double[].class, ByteOrder.LITTLE_ENDIAN);
     private static final VarHandle LONG_HANDLE =
             MethodHandles.byteArrayViewVarHandle(long[].class, ByteOrder.LITTLE_ENDIAN);
+    private static final VarHandle ID_HANDLE =
+            MethodHandles.byteArrayViewVarHandle(long[].class, ByteOrder.BIG_ENDIAN);
     private static final VarHandle INT_HANDLE =
             MethodHandles.byteArrayViewVarHandle(int[].class, ByteOrder.LITTLE_ENDIAN);
 
@@ -129,14 +131,7 @@ public class ModelConverter {
 
     public static byte[] toByteArray(long value) {
         byte[] array = new byte[8];
-        LONG_HANDLE.set(array, 0, value);
-        return array;
-    }
-
-    public static byte[] toByteArray(long v1, long v2) {
-        byte[] array = new byte[16];
-        LONG_HANDLE.set(array, 0, v1);
-        LONG_HANDLE.set(array, 8, v2);
+        ID_HANDLE.set(array, 0, value);
         return array;
     }
 }
