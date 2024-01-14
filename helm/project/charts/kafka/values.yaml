@@ -1,19 +1,15 @@
-
 kafka:
-  image: aivenoy/kafka-with-ts-plugin:latest
-  pullPolicy: IfNotPresent
-  replicas: 3
+  replicas: 2
+
+image:
+  name: renestadler/kafka-with-ts-plugin:latest
 
 zookeeper:
-  replicas: 3
-
-entityOperator:
-  topicOperator: {}
-  userOperator: {}
+  replicas: 2
 
 azure:
   container: kafka-data
   account:
-    name: devstoreaccount1
-    key: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
-  endpoint: http://azurite:10000/devstoreaccount1
+    name: clctieredstorage
+    key: token
+  endpoint: http://clctieredstorage.blob.core.windows.net/

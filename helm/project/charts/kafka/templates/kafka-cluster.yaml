@@ -1,0 +1,62 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: cluster
+spec:
+  kafka:
+    version: 3.6.1
+    replicas: {{ .Values.kafka.replicas }}
+    image: {{ .Values.image.name }}
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+    config:
+      offsets.topic.replication.factor: {{ .Values.kafka.replicas }}
+      transaction.state.log.replication.factor: {{ .Values.kafka.replicas }}
+      transaction.state.log.min.isr: 2
+      default.replication.factor: {{ .Values.kafka.replicas }}
+      min.insync.replicas: 2
+      inter.broker.protocol.version: "3.6"
+
+      remote.log.storage.system.enable: true
+      remote.log.manager.task.interval.ms: 5000
+      remote.log.metadata.manager.class.name: "org.apache.kafka.server.log.remote.metadata.storage.TopicBasedRemoteLogMetadataManager"
+      remote.log.metadata.manager.listener.name: "PLAIN-9092"
+      rlmm.config.remote.log.metadata.topic.replication.factor: 2
+      remote.log.storage.manager.class.path: "/tiered-storage-for-apache-kafka/core/*:/tiered-storage-for-apache-kafka/azure/*"
+      remote.log.storage.manager.class.name: "io.aiven.kafka.tieredstorage.RemoteStorageManager"
+      rsm.config.chunk.size: 4194304
+      rsm.config.fetch.chunk.cache.class: "io.aiven.kafka.tieredstorage.fetch.cache.DiskChunkCache"
+      rsm.config.fetch.chunk.cache.path: /home/kafka/kafka-tiered-storage-cache
+      rsm.config.fetch.chunk.cache.size: 1073741824
+      rsm.config.fetch.chunk.cache.prefetch.max.size: 16777216
+      rsm.config.custom.metadata.fields.include: "REMOTE_SIZE"
+      rsm.config.key.prefix: "tiered-storage/"
+      rsm.config.storage.backend.class: "io.aiven.kafka.tieredstorage.storage.azure.AzureBlobStorage"
+      rsm.config.storage.azure.container.name: {{ .Values.azure.container}}
+      rsm.config.storage.azure.account.name: {{ .Values.azure.account.name }}
+      rsm.config.storage.azure.account.key: {{ .Values.azure.account.key }}
+      rsm.config.storage.azure.endpoint.url: {{ .Values.azure.endpoint }}
+
+    storage:
+      type: jbod
+      volumes:
+      - id: 0
+        type: persistent-claim
+        size: 5Gi
+        deleteClaim: false
+  zookeeper:
+    replicas: {{ .Values.zookeeper.replicas }}
+    storage:
+      type: persistent-claim
+      size: 5Gi
+      deleteClaim: false
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
