@@ -1,5 +1,5 @@
 kafka:
-    bootstrapServers: localhost:9092
+    bootstrapServers: ${KAFKA_SERVER:localhost:9092}
     applicationId: data-processing-service
     invoiceTopic: invoice-topic-v1
     invoiceDetailTopic: invoice-audit-log-v1
@@ -7,3 +7,16 @@ kafka:
     articleTopic: article-topic-v1
     customerStore: customer-store-v1
     articleStore: article-store-v1
+management:
+    endpoint:
+        health:
+            group:
+                liveness:
+                    include: livenessState,kafkaStreams
+            probes:
+                enabled: true
+            show-details: always
+            management:
+                endpoint:
+server:
+    port: 80

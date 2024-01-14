@@ -6,10 +6,12 @@ plugins {
     id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.7"
     id("org.springframework.boot") version "3.2.1"
     id("io.spring.dependency-management") version "1.1.4"
+    id("com.google.cloud.tools.jib") version "3.4.0"
 }
 
 group = "at.fhooe.project"
 version = "0.0.1-SNAPSHOT"
+
 java {
     sourceCompatibility = JavaVersion.VERSION_17
 }
@@ -46,3 +48,16 @@ project.idea.module {
     }
 }
 
+jib {
+    from {
+        image = "docker://openjdk:17"
+    }
+    to {
+        image = "tiered-storage-application"
+        tags = setOf("latest")
+    }
+    container {
+        jvmFlags = listOf("-Xms512m", "-Xdebug")
+        mainClass = "at.fhooe.project.KafkaTieredStorageApplication"
+    }
+}

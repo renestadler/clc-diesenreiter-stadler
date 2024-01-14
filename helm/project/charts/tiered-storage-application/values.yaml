@@ -1,0 +1,14 @@
+
+
+image:
+  name: tiered-storage-application:latest
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+service:
+    type: LoadBalancer
+    port: 80
+
+kafka:
+  bootstrapServers: "cluster-kafka-0.cluster-kafka-brokers.default.svc.cluster.local:9092"

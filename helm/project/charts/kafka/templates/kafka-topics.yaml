@@ -1,0 +1,65 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: invoice-audit-log-v1
+  labels:
+    strimzi.io/cluster: cluster
+spec:
+  partitions: 8
+  replicas: 2
+  config:
+    remote.storage.enable: true
+    segment.bytes: 1048576
+    retention.ms: 220898482000
+    local.retention.ms: 1000
+
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: invoice-topic-v1
+  labels:
+    strimzi.io/cluster: cluster
+spec:
+  partitions: 8
+  replicas: 2
+  config:
+    segment.bytes: 1048576
+    retention.ms: -1
+    cleanup.policy: compact
+
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: customer-topic-v1
+  labels:
+    strimzi.io/cluster: cluster
+spec:
+  partitions: 8
+  replicas: 2
+  config:
+    segment.bytes: 1048576
+    retention.ms: -1
+    cleanup.policy: compact
+    
+---
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: article-topic-v1
+  labels:
+    strimzi.io/cluster: cluster
+spec:
+  partitions: 8
+  replicas: 2
+  config:
+    segment.bytes: 1048576
+    retention.ms: -1
+    cleanup.policy: compact
+    
+---
+
