@@ -13,12 +13,8 @@ Handles REST calls to store articles, customers, and invoices with streamlined p
 ### Azure Blob Storage
 Azure Blob Storage serves as our primary repository for long-term data storage. The log data is stored in 1 MB packages directly in the blob memory. This approach is chosen because the audit data is accessed at most once a month, eliminating the need to store "HOT" data.
 
-
-
-
 ## Needed Software
 * [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli) (version 2.0.64 or later)
-
 
 
 ## Prequisities
@@ -31,9 +27,7 @@ Azure Blob Storage serves as our primary repository for long-term data storage. 
     * The Azure CLI will either open your default browser to sign in or  instructs you to open a browser page.
 
 
-
 ## Deployment
-
 1. Open a terminal in the root folder of the project and run the following commands:
     * Create an AKS cluster and install the Storage Application
         ```shell 
@@ -55,11 +49,24 @@ Azure Blob Storage serves as our primary repository for long-term data storage. 
     ```shell 
     ./azure/remove-cluster.sh 
     ```
-    
+
+## Building the application from the basis
+
+Please first change all occurences of *renestadler* to your docker account name.
 
 
+### Using Kafka Tiered Storage in Kubernetes
+1. Pull the following Github Project:
+    * https://github.com/Aiven-Open/tiered-storage-for-apache-kafka
+2. Replace docker/Dockerfile with AivenTieredStoragePlugin_Dockerfile from this repo
+3. Run ``` make build ```
+4. Run ``` make docker_image ```
+5. Run ``` make docker_push ```
 
-
+### Building the Storage-Application in the project folder
+1. Run ``` ./gradlew jibDockerBuild ```
+2. Run ``` docker tag tieredStorageApplication <docker-account>/tieredStorageApplicatiion ```
+3. Run ``` docker push <docker-account>/tieredStorageApplication ```
 
 ## Deployment scripts
 
