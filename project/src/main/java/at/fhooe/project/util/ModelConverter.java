@@ -1,13 +1,17 @@
 package at.fhooe.project.util;
 
+import at.fhooe.project.controller.ArticleController;
 import at.fhooe.project.model.Article;
 import at.fhooe.project.model.Customer;
 import at.fhooe.project.model.Invoice;
 import org.apache.kafka.streams.KeyValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 
 import static java.util.Objects.requireNonNull;
 
@@ -72,7 +76,7 @@ public class ModelConverter {
         int offsetStart = KafkaOffsets.Customer.NAME_OFFSET + nameLength;
         int addressLength = (int) INT_HANDLE.get(pair.value, offsetStart + KafkaOffsets.Customer.ADDRESS_LENGTH_OFFSET);
         byte[] address = new byte[addressLength];
-        System.arraycopy(pair.value, offsetStart + KafkaOffsets.Customer.NAME_OFFSET, address, 0, nameLength);
+        System.arraycopy(pair.value, offsetStart + KafkaOffsets.Customer.ADDRESS_OFFSET, address, 0, addressLength);
         return new Customer(pair.key, new String(name), new String(address));
     }
 

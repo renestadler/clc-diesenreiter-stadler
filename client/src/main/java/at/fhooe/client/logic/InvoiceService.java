@@ -23,7 +23,7 @@ public class InvoiceService {
 
         for (int i = 1; i <= count; i++) {
             Invoice invoice = new Invoice();
-            invoice.setId(i);
+            invoice.setId(new Random().nextLong());
 
             Customer randomCustomer = getRandomElement(customers);
             invoice.setCustomerId(randomCustomer.getId());
@@ -33,7 +33,7 @@ public class InvoiceService {
             InvoiceEntry[] entries = new InvoiceEntry[numbEntries];
             for (int j = 0; j < numbEntries; j++){
                 Article article = getRandomElement(articles);
-                entries[i] = new InvoiceEntry(article.getId(), getRandomNumberInRange(MIN_ARTICLES, MAX_ARTICLES));
+                entries[j] = new InvoiceEntry(article.getId(), getRandomNumberInRange(MIN_ARTICLES, MAX_ARTICLES));
             }
             invoice.setEntries(entries);
 

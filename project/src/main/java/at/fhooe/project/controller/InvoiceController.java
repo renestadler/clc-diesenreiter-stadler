@@ -56,16 +56,17 @@ public class InvoiceController {
             List<PartitionInfo> partitionInfos = consumer.partitionsFor(properties.getInvoiceDetailTopic());
             consumer.assign(partitionInfos.stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition())).toList());
             consumer.seekToBeginning(partitionInfos.stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition())).toList());
+            ConsumerRecords<Void, String> records = null;
             do {
                 // Poll for records
-                ConsumerRecords<Void, String> records = consumer.poll(Duration.ofMillis(100));
+                records = consumer.poll(Duration.ofMillis(100));
 
                 // Process the records (print or handle as needed)
                 records.forEach(record -> {
                     invoices.add(record.value());
                 });
 
-            } while (consumer.poll(Duration.ZERO).count() > 0);
+            } while (records.count() > 0);
         }
         LOGGER.info("Retrieve all invoices for the last seven years");
         return invoices;

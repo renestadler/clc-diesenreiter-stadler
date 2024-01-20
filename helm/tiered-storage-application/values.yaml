@@ -1,10 +1,10 @@
 
 
 image:
-  name: tiered-storage-application:latest
+  name: renestadler/tiered-storage-application:latest
   pullPolicy: IfNotPresent
 
-replicaCount: 1
+replicaCount: 3
 
 service:
     type: LoadBalancer

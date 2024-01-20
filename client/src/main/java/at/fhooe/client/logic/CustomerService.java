@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class CustomerService {
@@ -17,7 +18,7 @@ public class CustomerService {
 
         for (int i = 1; i <= count; i++) {
             Customer customer = new Customer();
-            customer.setId(i);
+            customer.setId(new Random().nextLong());
             customer.setName(faker.name().fullName());
             customer.setAddress(faker.address().streetAddress());
             customers.add(customer);
