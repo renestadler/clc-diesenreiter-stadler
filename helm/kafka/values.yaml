@@ -1,0 +1,15 @@
+kafka:
+  replicas: 3
+
+image:
+  name: renestadler/kafka-with-ts-plugin:latest
+
+zookeeper:
+  replicas: 3
+
+azure:
+  container: testcontainer
+  account:
+    name: mytsblobstorage
+    key: key
+  endpoint: https://mytsblobstorage.blob.core.windows.net/

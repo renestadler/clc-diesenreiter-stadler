@@ -5,13 +5,14 @@ metadata:
   labels:
     strimzi.io/cluster: cluster
 spec:
-  partitions: 8
+  partitions: 4
   replicas: 2
   config:
     remote.storage.enable: true
-    segment.bytes: 1048576
+    segment.bytes: 64000
     retention.ms: 220898482000
-    local.retention.ms: 1000
+    local.retention.ms: 1
+    cleanup.policy: delete
 
 ---
 

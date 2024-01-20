@@ -6,6 +6,8 @@ import at.fhooe.client.logic.InvoiceService;
 import at.fhooe.client.model.Article;
 import at.fhooe.client.model.Customer;
 import at.fhooe.client.model.Invoice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -15,10 +17,11 @@ import java.util.List;
 @Service
 public class ApiClient {
 
-    private final WebClient apiClient = WebClient.create("http://localhost:8080/api/v3");
-    private ArticleService articleService;
-    private CustomerService customerService;
-    private InvoiceService invoiceService;
+    private final Logger LOG = LoggerFactory.getLogger(ApiClient.class);
+    private final WebClient apiClient = WebClient.create("http://localhost/");
+    private final ArticleService articleService;
+    private final CustomerService customerService;
+    private final InvoiceService invoiceService;
 
     @Autowired
     public ApiClient(ArticleService articleService, CustomerService customerService, InvoiceService invoiceService) {
@@ -27,7 +30,7 @@ public class ApiClient {
         this.invoiceService = invoiceService;
     }
 
-    public void createData(int numbCustomers, int numbArticles, int numbInvoices){
+    public void createData(int numbCustomers, int numbArticles, int numbInvoices) {
         List<Article> articles = articleService.generateRandomArticles(numbArticles);
         createArticles(articles);
         List<Customer> customers = customerService.generateRandomCustomers(numbCustomers);
@@ -44,9 +47,11 @@ public class ApiClient {
                     .retrieve()
                     .toBodilessEntity()
                     .block();
+            ;
         }
     }
-    private void createClients(List<Customer> customers){
+
+    private void createClients(List<Customer> customers) {
         for (Customer customer : customers) {
             apiClient.post()
                     .uri("/customer")
@@ -56,17 +61,19 @@ public class ApiClient {
                     .block();
         }
     }
-    public void createInvoices(List<Invoice> invoices){
+
+    public void createInvoices(List<Invoice> invoices) {
         for (Invoice invoice : invoices) {
             apiClient.post()
                     .uri("/invoice")
                     .bodyValue(invoice)
                     .retrieve()
                     .toBodilessEntity()
+                    .retry()
                     .block();
+            LOG.info("Added invoice {}",invoice.getId());
         }
     }
-
 
 
 }
