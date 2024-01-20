@@ -35,16 +35,26 @@ Azure Blob Storage serves as our primary repository for long-term data storage. 
 ## Deployment
 
 1. Open a terminal in the root folder of the project and run the following commands:
-    * Create an AKS cluster 
+    * Create an AKS cluster and install the Storage Application
         ```shell 
-        ./azure/aks-cluster.sh 
+        ./azure/install-cluster.sh 
         ```
-    * Create the Blob Storage 
+    * Upgrade the Storage Application and Kafka
         ``` shell
-        ./azure/blob-storage.sh
+        ./azure/upgrade-cluster.sh
         ```
 4. Generate data using the __Client Application__
-    * TODO
+    * Create a Jar file
+    * Open a terminal in the client folder of the project
+    * Run the command 
+        ```shell 
+        Java –jar app.jar <number_of_customers_to_create> <number_of_articles_to_create> <number_of_invoices_to_create>
+        ```
+
+5. Delete all resources 
+    ```shell 
+    ./azure/remove-cluster.sh 
+    ```
     
 
 
@@ -53,31 +63,30 @@ Azure Blob Storage serves as our primary repository for long-term data storage. 
 
 ## Deployment scripts
 
-### aks-cluster.sh
-Contains the Azure CLI commands to create an AKS cluster by executing the following steps:
-1. Create a resource group
-2. Create an Azure Container Registry
-3. Create an AKS cluster
-4. Run a helm chart
+### install-cluster.sh 
+1. Create a Resource Group: Initiates the creation of a resource group to encapsulate the AKS cluster.
 
-If you want to delete the cluster run
-``` shell
-az group delete --name clc3-diesenreiter-stelzer --yes --no-wait 
-```
+2. Create a Storage Account: Generates an account within the resource group where the AKS cluster is located.
 
+3. Create a Container for Blobs: Sets up a container for storing blobs within the created Storage Account.
 
-### blob-storage.sh
+4. Retrieve the Storage Account Key: Retrieves the key associated with the Storage Account to enable access.
 
-Contains the Azure CLI commands to create a Azure blob storage by executing the following steps:
-1. Create a storage account in the same resource group as the AKS ckuster (note that you need to run aks-cluster.sh beforehand for the resource group to be created)
-2. Create a container to store .blobs
-3. Get the storage account key
-4. Export connection varibles to an environment file
+5. Export Connection Variables: Save connection variables as environment variables for retrieval in the Helm files.
+
+6. Create an AKS Cluster: Execute commands to create the AKS cluster and provide a scalable and managed Kubernetes service.
+
+7. Run two Helm Charts: Execute charts on the newly created AKS cluster to start Kafka and the Storage Application.
 
 
-If you want to delete the cluster run
-```shell
- az group delete --name clc3-diesenreiter-stelzer --yes --no-wait 
- ```
+### upgrade-cluster.sh 
+1. Retrieve the Storage Account Key: Retrieves the key associated with the Storage Account to enable access.
+
+2. Execute two Helm Charts: Executes charts on the newly created AKS cluster to upgrade Kafka and the application.
+
+
+
+### remove-cluster.sh 
+Delete the Resource Group and thereby all resources created on Azure.
 
 
