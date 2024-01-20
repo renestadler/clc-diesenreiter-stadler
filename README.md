@@ -2,7 +2,7 @@
 In many organisations, the long-term storage of business data is a challenge, especially when it comes to large volumes of data that need to be retained over a long period of time. Traditional storage solutions can be expensive, and scalability and efficiency requirements are often a challenge. In this context, this project plans to evaluate and apply Kafka Tiered Storage in the Azure Cloud to enable efficient long-term data storage of business data.
 
 ## Architecture
-![Architecture](.\readme-imgs\architecture.png)
+![Architecture](./readme-imgs/architecture.png)
 
 ### Client Application
 Generates a specified number of articles, customers, and invoices. Moreover, it coordinates REST calls to the Storage application, leveraging the dynamically created data. This enables the generation of sufficient data to assess the system's proficiency in handling substantial volumes of information.
